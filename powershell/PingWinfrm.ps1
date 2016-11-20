@@ -9,17 +9,18 @@ $pingNumber = "4"
  #ping the localhost
 function pingHost()
 {
-
-
-
     $prop = @{N=’IPV4’; E={$_.IPV4Address}},
             @{N=’IPV6’; E={$_.IPV6Address}},
             @{N=’Latency’; E={$_.ResponseTime}}
-    $result = Test-Connection -ComputerName $txtHost.Text -BufferSize $bytes -TimeToLive $TTL -Count $pingNumber -Verbose| format-list -property $prop | Out-String
 
 
-    $rtxt.Appendtext($result)
+    #changed from forech loop to a for loop
+    for($num = 1; $num -le $pingNumber; $num++){
+    	#runs test-connection once then displays results
+    	$result = Test-Connection -ComputerName $txtHost.Text -BufferSize $bytes -TimeToLive $TTL -Count 1 -Verbose| format-list -property $prop | Out-String
 
+    	$rtxt.Appendtext($result)
+    }
 
 }
 
