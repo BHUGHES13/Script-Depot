@@ -41,17 +41,15 @@ $hostNotFound = "The host was not found for $txtHost.Text"
 #runs test-connection once then displays results
     for($num = 1; $num -le $pingNumber; $num++)
     {
-        $result = Test-Connection -ComputerName $txtHost.Text -BufferSize $txtbytes.Text -TimeToLive $txtTTL.Text -Count 1 -Verbose| format-list -property $prop | Out-String
+        try{
+        $result = Test-Connection -ComputerName $txtHost.Text -BufferSize $txtbytes.Text -TimeToLive $txtTTL.Text -Count 1 -Verbose -ErrorAction Stop | format-list -property $prop | Out-String
+        }
+        catch{
+            $rtxt.AppendText("$hostNotFound`n")
+        }       
         start-sleep -Seconds 1
 
-        if ($result -like "Test-Connection : Testing connection to computer*") 
-        {
-            $rtxt.AppendText($hostNotFound)
-        }
-        else 
-        {
             $rtxt.Appendtext($result)
-        }
     }
 }
 
